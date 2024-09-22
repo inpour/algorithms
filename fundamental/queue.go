@@ -50,6 +50,7 @@ func (queue *queue) Size() int {
 // The complexity is O(1).
 func (queue *queue) Enqueue(item any) {
 	queue.lock.Lock()
+	defer queue.lock.Unlock()
 
 	oldLast := queue.last
 	queue.last = &queueNode{item: item}
@@ -60,19 +61,18 @@ func (queue *queue) Enqueue(item any) {
 		oldLast.next = queue.last
 	}
 	queue.size++
-
-	queue.lock.Unlock()
 }
 
 // Dequeue removes and returns the item least recently added to queue,
 // returns ErrEmptyQueue if queue is empty.
 // The complexity is O(1).
 func (queue *queue) Dequeue() (any, error) {
+	queue.lock.Lock()
+	defer queue.lock.Unlock()
+
 	if queue.IsEmpty() {
 		return nil, ErrEmptyQueue
 	}
-
-	queue.lock.Lock()
 
 	item := queue.first.item
 	queue.first = queue.first.next
@@ -80,8 +80,6 @@ func (queue *queue) Dequeue() (any, error) {
 		queue.last = nil
 	}
 	queue.size--
-
-	queue.lock.Unlock()
 
 	return item, nil
 }

@@ -49,30 +49,27 @@ func (stack *stack) Size() int {
 // The complexity is O(1).
 func (stack *stack) Push(item any) {
 	stack.lock.Lock()
+	defer stack.lock.Unlock()
 
 	oldFirst := stack.first
 	stack.first = &stackNode{item: item}
 	stack.first.next = oldFirst
 	stack.size++
-
-	stack.lock.Unlock()
 }
 
 // Pop removes and returns the item most recently added to stack,
 // returns ErrEmptyStack if stack is empty.
 // The complexity is O(1).
 func (stack *stack) Pop() (any, error) {
+	stack.lock.Lock()
+	defer stack.lock.Unlock()
+
 	if stack.IsEmpty() {
 		return nil, ErrEmptyStack
 	}
-
-	stack.lock.Lock()
-
 	item := stack.first.item
 	stack.first = stack.first.next
 	stack.size--
-
-	stack.lock.Unlock()
 
 	return item, nil
 }
