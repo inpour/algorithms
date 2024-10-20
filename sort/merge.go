@@ -8,16 +8,16 @@ package sort
 // The complexity is O(N*log(N)) where N = len(x).
 func Merge[T any](x []T, less func(a, b T) bool) {
 	aux := make([]T, len(x))
-	sort(x, aux, 0, len(x)-1, less)
+	sortMerge(x, aux, 0, len(x)-1, less)
 }
 
-func sort[T any](x []T, aux []T, lo, hi int, less func(a, b T) bool) {
+func sortMerge[T any](x []T, aux []T, lo, hi int, less func(a, b T) bool) {
 	if hi <= lo {
 		return
 	}
 	mid := lo + (hi-lo)/2
-	sort(x, aux, lo, mid, less)
-	sort(x, aux, mid+1, hi, less)
+	sortMerge(x, aux, lo, mid, less)
+	sortMerge(x, aux, mid+1, hi, less)
 	merge(x, aux, lo, mid, hi, less)
 }
 
