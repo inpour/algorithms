@@ -22,16 +22,16 @@ func Quick[T any](x []T, less func(a, b T) bool) {
 		x[i], x[j] = x[j], x[i]
 	})
 
-	sortQuick(x, 0, len(x)-1, less)
+	quickRange(x, 0, len(x)-1, less)
 }
 
-func sortQuick[T any](x []T, lo, hi int, less func(a, b T) bool) {
+func quickRange[T any](x []T, lo, hi int, less func(a, b T) bool) {
 	if hi <= lo {
 		return
 	}
 	j := partition(x, lo, hi, less)
-	sortQuick(x, lo, j-1, less)
-	sortQuick(x, j+1, hi, less)
+	quickRange(x, lo, j-1, less)
+	quickRange(x, j+1, hi, less)
 }
 
 func partition[T any](x []T, lo, hi int, less func(a, b T) bool) int {
