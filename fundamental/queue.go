@@ -5,16 +5,16 @@ import (
 	"sync"
 )
 
-// The queue type represents a first-in-first-out (FIFO) queue of generic items implemented
+// The Queue type represents a first-in-first-out (FIFO) Queue of generic items implemented
 // using a linked list.
 // It supports the usual Enqueue and Dequeue operations, along with methods for peeking at the
-// first item, getting the size of the queue and testing if the queue is empty.
+// first item, getting the size of the Queue and testing if the Queue is empty.
 // The Enqueue, Dequeue, Peek, Size, and IsEmpty operations all take constant time in the worst case.
-type queue struct {
+type Queue struct {
 	lock  *sync.Mutex // protect race condition
-	first *queueNode  // beginning of queue
-	last  *queueNode  // end of queue
-	size  int         // number of items in  queue
+	first *queueNode  // beginning of Queue
+	last  *queueNode  // end of Queue
+	size  int         // number of items in  Queue
 }
 
 // queueNode helper linked list.
@@ -23,10 +23,10 @@ type queueNode struct {
 	next *queueNode
 }
 
-// NewQueue initializes an empty queue.
+// NewQueue initializes an empty Queue.
 // The complexity is O(1).
-func NewQueue() *queue {
-	return &queue{
+func NewQueue() *Queue {
+	return &Queue{
 		lock: &sync.Mutex{},
 		size: 0,
 	}
@@ -34,21 +34,21 @@ func NewQueue() *queue {
 
 var ErrEmptyQueue = errors.New("queue is empty")
 
-// IsEmpty returns true if this queue is empty.
+// IsEmpty returns true if this Queue is empty.
 // The complexity is O(1).
-func (queue *queue) IsEmpty() bool {
+func (queue *Queue) IsEmpty() bool {
 	return queue.first == nil
 }
 
-// Size returns the number of items in this queue.
+// Size returns the number of items in this Queue.
 // The complexity is O(1).
-func (queue *queue) Size() int {
+func (queue *Queue) Size() int {
 	return queue.size
 }
 
-// Enqueue adds the item to this queue.
+// Enqueue adds the item to this Queue.
 // The complexity is O(1).
-func (queue *queue) Enqueue(item any) {
+func (queue *Queue) Enqueue(item any) {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 
@@ -63,10 +63,10 @@ func (queue *queue) Enqueue(item any) {
 	queue.size++
 }
 
-// Dequeue removes and returns the item least recently added to queue,
-// returns ErrEmptyQueue if queue is empty.
+// Dequeue removes and returns the item least recently added to Queue,
+// returns ErrEmptyQueue if Queue is empty.
 // The complexity is O(1).
-func (queue *queue) Dequeue() (any, error) {
+func (queue *Queue) Dequeue() (any, error) {
 	queue.lock.Lock()
 	defer queue.lock.Unlock()
 
@@ -84,10 +84,10 @@ func (queue *queue) Dequeue() (any, error) {
 	return item, nil
 }
 
-// Peek returns (but does not remove) the item least recently added to queue,
-// returns ErrEmptyQueue if queue is empty.
+// Peek returns (but does not remove) the item least recently added to Queue,
+// returns ErrEmptyQueue if Queue is empty.
 // The complexity is O(1).
-func (queue *queue) Peek() (any, error) {
+func (queue *Queue) Peek() (any, error) {
 	if queue.IsEmpty() {
 		return nil, ErrEmptyQueue
 	}
