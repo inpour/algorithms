@@ -54,7 +54,7 @@ func (bag *Bag[T]) Add(item T) {
 	bag.size++
 }
 
-// Iterator returns an iterator that iterates over the items in the Bag.
+// Iterator returns an iterator that iterates over the items in the Bag in a for loop.
 func (bag *Bag[T]) Iterator() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		if bag.first == nil {
