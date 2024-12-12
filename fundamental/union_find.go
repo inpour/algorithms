@@ -7,21 +7,17 @@ import (
 
 // The UnionFind type represents a union–find data type (also known as the disjoint-sets
 // data type). This implementation uses weighted quick union by subtreeSize (without path compression).
-//
 // It supports the classic union and find operations, along with a count operation that
 // returns the total number of sets.
-//
 // The union–find data type models a collection of sets containing n elements, with each element in
 // exactly one set. The elements are named 0 through n–1.
 // Initially, there are n sets, with each element in its own set. The canonical element of a set (also
 // known as the root, identifier, leader, or set representative) is one distinguished element in the set.
-//
 // Here is a summary of the operations:
-//
-//	find(p) returns the canonical element of the set containing p. The find operation returns the same
-//	value for two elements if and only if they are in the same set.
-//	union(p, q) merges the set containing element p with the set containing element q. That is, if
-//	p and q are in different sets, replace these two sets with a new set that is the union of the two.
+// find(p) returns the canonical element of the set containing p. The find operation returns the same
+// value for two elements if and only if they are in the same set.
+// union(p, q) merges the set containing element p with the set containing element q. That is, if
+// p and q are in different sets, replace these two sets with a new set that is the union of the two.
 type UnionFind struct {
 	lock        *sync.Mutex // protect race condition
 	parent      []int       // parent[i] = parent of i (if parent[i] = i then i is root)
