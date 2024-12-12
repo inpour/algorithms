@@ -80,7 +80,7 @@ func (graph *Graph) AddEdge(v, w int) error {
 	return nil
 }
 
-// Adj returns the vertices adjacent to vertex v, that can be iterated in a for loop.
+// Adj returns an iterator that iterates over vertices adjacent to vertex v.
 // The complexity is O(1).
 func (graph *Graph) Adj(v int) (iter.Seq[int], error) {
 	if err := graph.validateVertex(v); err != nil {
