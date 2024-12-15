@@ -76,7 +76,10 @@ func (graph *Graph) AddEdge(v, w int) error {
 	}
 	graph.e++
 	graph.adj[v].Add(w)
-	graph.adj[w].Add(v)
+	// if this is self loop don't add edge twice
+	if v != w {
+		graph.adj[w].Add(v)
+	}
 	return nil
 }
 
