@@ -44,8 +44,8 @@ func (d *DepthFirstPath) dfs(graph *Graph, v int) {
 // HasPathTo returns true if there is a path between the source vertex and vertex v.
 // The complexity is O(1).
 func (d *DepthFirstPath) HasPathTo(v int) (bool, error) {
-	if v < 0 || v >= len(d.marked) {
-		return false, ErrInvalidVertexIndex
+	if err := d.validateVertex(v); err != nil {
+		return false, err
 	}
 	return d.marked[v], nil
 }
@@ -61,4 +61,11 @@ func (d *DepthFirstPath) PathTo(v int) (iter.Seq[int], error) {
 	}
 	s.Push(d.s)
 	return s.Iterator(), nil
+}
+
+func (d *DepthFirstPath) validateVertex(v int) error {
+	if v < 0 || v >= len(d.marked) {
+		return ErrInvalidVertexIndex
+	}
+	return nil
 }

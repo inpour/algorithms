@@ -7,7 +7,6 @@ import (
 
 // BreadthFirstPath represents a data type for finding the shortest paths from a source vertex (s) to every other vertex in graph.
 // This implementation uses breadth-first search (BFS).
-// It uses Θ(v) extra space (not including the graph).
 type BreadthFirstPath struct {
 	marked []bool // marked[v] = is there an s-v path?
 	edgeTo []int  // edgeTo[v] = last edge on shortest s-v path
@@ -58,8 +57,8 @@ func (b *BreadthFirstPath) bfs(graph *Graph, s int) {
 // HasPathTo returns true if there is a path between the source vertex and vertex v.
 // The complexity is O(1).
 func (b *BreadthFirstPath) HasPathTo(v int) (bool, error) {
-	if v < 0 || v >= len(b.marked) {
-		return false, ErrInvalidVertexIndex
+	if err := b.validateVertex(v); err != nil {
+		return false, err
 	}
 	return b.marked[v], nil
 }
@@ -68,8 +67,8 @@ func (b *BreadthFirstPath) HasPathTo(v int) (bool, error) {
 // returns -1 if there is no path.
 // The complexity is O(1).
 func (b *BreadthFirstPath) DistTo(v int) (int, error) {
-	if v < 0 || v >= len(b.marked) {
-		return -1, ErrInvalidVertexIndex
+	if err := b.validateVertex(v); err != nil {
+		return -1, err
 	}
 	return b.distTo[v], nil
 }
@@ -85,4 +84,11 @@ func (b *BreadthFirstPath) PathTo(v int) (iter.Seq[int], error) {
 	}
 	s.Push(b.s)
 	return s.Iterator(), nil
+}
+
+func (b *BreadthFirstPath) validateVertex(v int) error {
+	if v < 0 || v >= len(b.marked) {
+		return ErrInvalidVertexIndex
+	}
+	return nil
 }

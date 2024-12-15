@@ -36,8 +36,8 @@ func (d *DepthFirstSearch) dfs(graph *Graph, v int) {
 // Marked returns true if there is a path between the source vertex (s) and vertex v.
 // The complexity is O(1).
 func (d *DepthFirstSearch) Marked(v int) (bool, error) {
-	if v < 0 || v >= len(d.marked) {
-		return false, ErrInvalidVertexIndex
+	if err := d.validateVertex(v); err != nil {
+		return false, err
 	}
 	return d.marked[v], nil
 }
@@ -46,4 +46,11 @@ func (d *DepthFirstSearch) Marked(v int) (bool, error) {
 // The complexity is O(1).
 func (d *DepthFirstSearch) Count() int {
 	return d.count
+}
+
+func (d *DepthFirstSearch) validateVertex(v int) error {
+	if v < 0 || v >= len(d.marked) {
+		return ErrInvalidVertexIndex
+	}
+	return nil
 }
