@@ -16,9 +16,9 @@ func mergeRange[T any](x []T, aux []T, lo, hi int, less func(a, b T) bool) {
 		return
 	}
 	mid := lo + (hi-lo)/2
-	mergeRange(x, aux, lo, mid, less)
-	mergeRange(x, aux, mid+1, hi, less)
-	merge(x, aux, lo, mid, hi, less)
+	mergeRange[T](x, aux, lo, mid, less)
+	mergeRange[T](x, aux, mid+1, hi, less)
+	merge[T](x, aux, lo, mid, hi, less)
 }
 
 func merge[T any](x []T, aux []T, lo, mid, hi int, less func(a, b T) bool) {

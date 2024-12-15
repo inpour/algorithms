@@ -18,7 +18,7 @@ func Heap[T any](x []T, less func(a, b T) bool) {
 	for k > 1 {
 		x[0], x[k-1] = x[k-1], x[0]
 		k--
-		sink(x, 1, k, less)
+		sink[T](x, 1, k, less)
 	}
 }
 

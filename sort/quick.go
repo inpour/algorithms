@@ -29,9 +29,9 @@ func quickRange[T any](x []T, lo, hi int, less func(a, b T) bool) {
 	if hi <= lo {
 		return
 	}
-	j := partition(x, lo, hi, less)
-	quickRange(x, lo, j-1, less)
-	quickRange(x, j+1, hi, less)
+	j := partition[T](x, lo, hi, less)
+	quickRange[T](x, lo, j-1, less)
+	quickRange[T](x, j+1, hi, less)
 }
 
 func partition[T any](x []T, lo, hi int, less func(a, b T) bool) int {
