@@ -91,7 +91,9 @@ func (stack *Stack[T]) Peek() (T, error) {
 func (stack *Stack[T]) Iterator() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for node := stack.first; node != nil; node = node.next {
-			yield(node.item)
+			if !yield(node.item) {
+				return
+			}
 		}
 	}
 }

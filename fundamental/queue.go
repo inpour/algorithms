@@ -100,7 +100,9 @@ func (queue *Queue[T]) Peek() (T, error) {
 func (queue *Queue[T]) Iterator() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for node := queue.first; node != nil; node = node.next {
-			yield(node.item)
+			if !yield(node.item) {
+				return
+			}
 		}
 	}
 }

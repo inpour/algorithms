@@ -58,7 +58,9 @@ func (bag *Bag[T]) Add(item T) {
 func (bag *Bag[T]) Iterator() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for node := bag.first; node != nil; node = node.next {
-			yield(node.item)
+			if !yield(node.item) {
+				return
+			}
 		}
 	}
 }
