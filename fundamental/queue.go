@@ -24,7 +24,7 @@ type queueNode[T any] struct {
 	next *queueNode[T]
 }
 
-// NewQueue initializes an empty Queue.[T
+// NewQueue initializes an empty Queue.
 // The complexity is O(1).
 func NewQueue[T any]() *Queue[T] {
 	return &Queue[T]{

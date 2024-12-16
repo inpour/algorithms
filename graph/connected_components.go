@@ -5,6 +5,7 @@ package graph
 // The component identifier (id) of a vertex is an integer between 0 and k–1, where k is the number
 // of connected components. Two vertices have the same component identifier if and only if they are
 // in the same connected component.
+// It uses O(V) extra space (not including the graph), where V is the number of vertices.
 type ConnectedComponents struct {
 	marked []bool // marked[v] = has vertex v been marked?
 	id     []int  // id[v] = id of connected component containing v
@@ -13,8 +14,7 @@ type ConnectedComponents struct {
 }
 
 // NewConnectedComponents computes the connected components of the graph
-// It uses Θ(v) extra space (not including the graph) and takes Θ(v+e) time, where v is the number
-// of vertices and e is the number of edges.
+// The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
 func NewConnectedComponents(graph *Graph) *ConnectedComponents {
 	c := &ConnectedComponents{
 		marked: make([]bool, graph.V()),

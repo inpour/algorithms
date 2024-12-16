@@ -6,18 +6,11 @@ import (
 	"iter"
 )
 
-// Graph represents an undirected graph of vertices named 0 through v – 1.
-// It supports the following two primary operations: add an edge to the graph,
-// iterate over all the vertices adjacent to a vertex. It also provides
-// methods for returning the degree of a vertex, the number of vertices (v) in the graph,
-// and the number of edges (e) in the graph. Parallel edges and self-loops are permitted.
-// By convention, a self-loop v-v appears in the adjacency list of v twice and contributes
-// two to the degree of v.
-// This implementation uses an adjacency-lists representation, which is a vertex-indexed
-// array of Bag objects.
-// It uses Θ(e+v) space, where e is the number of edges and v is the number of vertices.
-// All instance methods take Θ(1) time. (Though, iterating over the vertices returned by
-// Adj() takes time proportional to the degree of the vertex.)
+// Graph represents an undirected graph of vertices named 0 through v – 1. This implementation uses an adjacency-lists
+// representation, which is a vertex-indexed array of Bags.
+// Parallel edges and self-loops are permitted. By convention, a self-loop v-v appears in the adjacency list of v twice
+// and contributes two to the degree of v.
+// It uses O(V + E) space, where V is the number of vertices and E is the number of edges.
 type Graph struct {
 	v   int                     // number of vertices
 	e   int                     // number of edges
@@ -25,7 +18,7 @@ type Graph struct {
 }
 
 // NewGraph initializes a graph with v number vertices
-// The complexity is O(N) where N = v.
+// The complexity is O(V), where V is the number of vertices.
 func NewGraph(v int) (*Graph, error) {
 	if v < 0 {
 		return nil, ErrInvalidVertices
@@ -76,15 +69,11 @@ func (graph *Graph) AddEdge(v, w int) error {
 	}
 	graph.e++
 	graph.adj[v].Add(w)
-	// if this is self loop don't add edge twice
-	if v != w {
-		graph.adj[w].Add(v)
-	}
+	graph.adj[w].Add(v)
 	return nil
 }
 
 // Adj returns an iterator that iterates over vertices adjacent to vertex v.
-// The complexity is O(1).
 func (graph *Graph) Adj(v int) (iter.Seq[int], error) {
 	if err := graph.validateVertex(v); err != nil {
 		return nil, err

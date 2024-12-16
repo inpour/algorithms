@@ -8,6 +8,7 @@ import (
 // Cycle represents a data type for determining whether an undirected graph has a simple cycle.
 // The HasCycle operation determines whether the graph has a cycle and, if so, the Cycle operation returns one.
 // This implementation uses depth-first search (DFS).
+// It uses O(V) extra space (not including the graph), where V is the number of vertices.
 type Cycle struct {
 	marked []bool
 	edgeTo []int
@@ -15,10 +16,8 @@ type Cycle struct {
 }
 
 // NewCycle determines whether the undirected graph has a cycle and, if so, finds such a cycle.
-// It uses Θ(v) extra space (not including the graph).
-// It takes Θ(v+e) time in the worst case, where v is the number of vertices and e is the number of edges.
-// The depth-first search part takes only O(v) time; however, checking for parallel edges takes Θ(v+e) time
-// in the worst case.
+// The complexity is O(V + E), where V is the number of vertices and E is the number of edges. The depth-first search
+// part takes only O(V) time; however, checking for self-loops and parallel edges takes O(V + E) time in the worst case.
 func NewCycle(graph *Graph) *Cycle {
 	c := &Cycle{
 		marked: make([]bool, graph.V()),
@@ -26,9 +25,9 @@ func NewCycle(graph *Graph) *Cycle {
 		cycle:  fundamental.NewStack[int](),
 	}
 
-	//if c.hasSelfLoop(graph) {
-	//	return c
-	//}
+	if c.hasSelfLoop(graph) {
+		return c
+	}
 
 	if c.hasParallelEdges(graph) {
 		return c
@@ -110,11 +109,12 @@ func (c *Cycle) dfs(graph *Graph, v int, parent int) {
 }
 
 // HasCycle returns true if the graph has a cycle.
+// The complexity is O(1).
 func (c *Cycle) HasCycle() bool {
 	return !c.cycle.IsEmpty()
 }
 
-// Cycle returns a cycle in the graph.
+// Cycle returns an iterator that iterates over a cycle in the graph.
 func (c *Cycle) Cycle() iter.Seq[int] {
 	return c.cycle.Iterator()
 }

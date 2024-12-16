@@ -7,6 +7,7 @@ import (
 
 // BreadthFirstPath represents a data type for finding the shortest paths from a source vertex (s) to every other vertex in graph.
 // This implementation uses breadth-first search (BFS).
+// It uses O(V) extra space (not including the graph), where V is the number of vertices.
 type BreadthFirstPath struct {
 	marked []bool // marked[v] = is there an s-v path?
 	edgeTo []int  // edgeTo[v] = last edge on shortest s-v path
@@ -15,8 +16,7 @@ type BreadthFirstPath struct {
 }
 
 // NewBreadthFirstPath computes the shortest path between the source vertex (s) and every other vertex in graph.
-// It uses Θ(v) extra space (not including the graph) and takes Θ(v+e) time in the worst case,
-// where v is the number of vertices and e is the number of edges.
+// The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
 func NewBreadthFirstPath(graph *Graph, s int) (*BreadthFirstPath, error) {
 	if err := graph.validateVertex(s); err != nil {
 		return nil, err

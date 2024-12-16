@@ -1,14 +1,14 @@
 package graph
 
 // DepthFirstSearch (DFS) represents a data type for determining the vertices connected to a given source vertex (s) in a graph.
+// It uses O(V) extra space (not including the graph), where V is the number of vertices.
 type DepthFirstSearch struct {
 	marked []bool // marked[v] = is there an s-v path?
 	count  int    // number of vertices connected to s
 }
 
 // NewDepthFirstSearch computes the vertices in graph that are connected to the source vertex (s).
-// It uses Θ(v) extra space (not including the graph) and takes Θ(v+e) time in the worst case,
-// where v is the number of vertices and e is the number of edges.
+// The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
 func NewDepthFirstSearch(graph *Graph, s int) (*DepthFirstSearch, error) {
 	if err := graph.validateVertex(s); err != nil {
 		return nil, err

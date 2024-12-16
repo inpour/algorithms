@@ -7,6 +7,7 @@ import (
 
 // DepthFirstPath represents a data type for finding paths from a source vertex (s) to every other vertex in graph.
 // This implementation uses depth-first search (DFS).
+// It uses O(V) extra space (not including the graph), where V is the number of vertices.
 type DepthFirstPath struct {
 	marked []bool // marked[v] = is there an s-v path?
 	edgeTo []int  // edgeTo[v] = last edge on s-v path
@@ -14,8 +15,7 @@ type DepthFirstPath struct {
 }
 
 // NewDepthFirstPath computes a path between s and every other vertex in graph.
-// It uses Θ(v) extra space (not including the graph) and takes Θ(v+e) time in the worst case,
-// where v is the number of vertices and e is the number of edges.
+// The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
 func NewDepthFirstPath(graph *Graph, s int) (*DepthFirstPath, error) {
 	if err := graph.validateVertex(s); err != nil {
 		return nil, err
