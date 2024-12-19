@@ -5,8 +5,7 @@ import (
 	"sync"
 )
 
-// The Bag type represents a Bag (or multiset) of generic items. This implementation
-// uses a linked list.
+// Bag represents a Bag (or multiset) of generic items. This implementation uses a singly linked list.
 // It supports insertion and iterating over the items in arbitrary order.
 // The Add, IsEmpty, and Size operations take constant time. Iteration takes time
 // proportional to the number of items.
@@ -16,7 +15,7 @@ type Bag[T any] struct {
 	size  int         // number of items in Bag
 }
 
-// bagNode helper linked list.
+// bagNode a helper linked list.
 type bagNode[T any] struct {
 	item T
 	next *bagNode[T]

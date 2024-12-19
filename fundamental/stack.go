@@ -6,8 +6,7 @@ import (
 	"sync"
 )
 
-// The Stack type represents a last-in-first-out (LIFO) Stack of generic items implemented
-// using a linked list.
+// Stack represents a last-in-first-out (LIFO) Stack of generic items. This implementation uses a singly linked list.
 // It supports the usual Push and Pop operations, along with methods for Peeking at the
 // top item, getting the size of the Stack and testing if the Stack is empty.
 // The Push, Pop, Peek, Size, and IsEmpty operations all take constant time in the worst case.
@@ -17,7 +16,7 @@ type Stack[T any] struct {
 	size  int           // number of items in Stack
 }
 
-// stackNode helper linked list.
+// stackNode a helper linked list.
 type stackNode[T any] struct {
 	item T
 	next *stackNode[T]

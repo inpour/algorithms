@@ -6,8 +6,7 @@ import (
 	"sync"
 )
 
-// The Queue type represents a first-in-first-out (FIFO) Queue of generic items implemented
-// using a linked list.
+// Queue represents a first-in-first-out (FIFO) Queue of generic items. This implementation uses a singly linked list.
 // It supports the usual Enqueue and Dequeue operations, along with methods for peeking at the
 // first item, getting the size of the Queue and testing if the Queue is empty.
 // The Enqueue, Dequeue, Peek, Size, and IsEmpty operations all take constant time in the worst case.
@@ -18,7 +17,7 @@ type Queue[T any] struct {
 	size  int           // number of items in  Queue
 }
 
-// queueNode helper linked list.
+// queueNode a helper linked list.
 type queueNode[T any] struct {
 	item T
 	next *queueNode[T]
