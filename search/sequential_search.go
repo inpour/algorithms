@@ -31,7 +31,7 @@ func NewSequentialSearchST[K, V any](equals func(a, b K) bool) *SequentialSearch
 	}
 }
 
-// Size returns the number of key-value pairs in this symbol table.
+// Size returns the number of key-value pairs.
 // The complexity is O(1).
 func (s *SequentialSearchST[K, V]) Size() int {
 	return s.n
@@ -52,7 +52,7 @@ func (s *SequentialSearchST[K, V]) Contains(key K) bool {
 	return true
 }
 
-// Get returns the value associated with the given key in this symbol table, ErrAbsentKey error if key is absent.
+// Get returns the value associated with the given key, ErrAbsentKey error if key is absent.
 // The complexity is O(N) where N is the number of key-value pairs.
 func (s *SequentialSearchST[K, V]) Get(key K) (V, error) {
 	for x := s.first; x != nil; x = x.next {
@@ -64,13 +64,14 @@ func (s *SequentialSearchST[K, V]) Get(key K) (V, error) {
 	return value, ErrAbsentKey
 }
 
-// Put Inserts the specified key-value pair into the symbol table, overwriting the old value with the new value
-// if the symbol table already contains the specified key.
+// Put Inserts the specified key-value pair, overwriting the old value with the new value if the symbol table
+// already contains the specified key.
 // The complexity is O(N) where N is the number of key-value pairs.
 func (s *SequentialSearchST[K, V]) Put(key K, val V) {
 	for x := s.first; x != nil; x = x.next {
 		if s.equals(key, x.key) {
 			x.val = val
+			return
 		}
 	}
 	s.first = &sequentialSearchSTNode[K, V]{
@@ -81,8 +82,7 @@ func (s *SequentialSearchST[K, V]) Put(key K, val V) {
 	s.n++
 }
 
-// Delete removes the specified key and its associated value from this symbol table.
-// returns ErrAbsentKey error if key is absent.
+// Delete removes the specified key and its associated value, ErrAbsentKey if key is absent.
 // The complexity is O(N) where N is the number of key-value pairs.
 func (s *SequentialSearchST[K, V]) Delete(key K) error {
 	for p := &s.first; *p != nil; p = &(*p).next {
@@ -95,7 +95,7 @@ func (s *SequentialSearchST[K, V]) Delete(key K) error {
 	return ErrAbsentKey
 }
 
-// Iterator returns an iterator that iterates over all key-value pairs in the symbol table.
+// Iterator returns an iterator that iterates over all key-value pairs.
 func (s *SequentialSearchST[K, V]) Iterator() iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		for node := s.first; node != nil; node = node.next {
