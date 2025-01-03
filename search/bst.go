@@ -11,7 +11,7 @@ import (
 //	if a > b then compare(a, b) returns 1
 //	if a < b then compare(a, b) returns -1
 //
-// This implementation uses an (unbalanced) binary search tree.
+// This implementation uses an unbalanced binary search tree.
 type BST[K, V any] struct {
 	root    *bstNode[K, V]   // root of BST
 	compare func(a, b K) int // function to compare two keys
@@ -46,7 +46,7 @@ func (b *BST[K, V]) Size() int {
 	return b.size(b.root)
 }
 
-// size return number of key-value pairs in BST rooted at x
+// size return number of key-value pairs in BST rooted at node.
 // The complexity is O(1).
 func (b *BST[K, V]) size(node *bstNode[K, V]) int {
 	if node == nil {
@@ -265,13 +265,13 @@ func (b *BST[K, V]) ceiling(node *bstNode[K, V], key K) (*bstNode[K, V], error) 
 	if cmp == 0 {
 		return node, nil
 	}
-	if cmp < 0 {
-		if tmpNode, err := b.ceiling(node.left, key); err == nil {
-			return tmpNode, nil
-		}
-		return node, nil
+	if cmp > 0 {
+		return b.ceiling(node.right, key)
 	}
-	return b.ceiling(node.right, key)
+	if tmpNode, err := b.ceiling(node.left, key); err == nil {
+		return tmpNode, nil
+	}
+	return node, nil
 }
 
 // Select return the kth smallest key (key of rank k), ErrInvalidRank if rank is out of range.
