@@ -1,6 +1,6 @@
 package graph
 
-// ConnectedComponents represents a data type for determining the connected components in a graph.
+// ConnectedComponents represents a data type for determining the connected components in an undirected graph.
 // This implementation uses depth-first search.
 // The component identifier (id) of a vertex is an integer between 0 and k–1, where k is the number
 // of connected components. Two vertices have the same component identifier if and only if they are

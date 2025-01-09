@@ -16,7 +16,7 @@ type DepthFirstPath struct {
 
 // NewDepthFirstPath computes a path between s and every other vertex in graph.
 // The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
-func NewDepthFirstPath(graph *Graph, s int) (*DepthFirstPath, error) {
+func NewDepthFirstPath(graph UndirectedOrDirectedGraph, s int) (*DepthFirstPath, error) {
 	if err := graph.validateVertex(s); err != nil {
 		return nil, err
 	}
@@ -30,7 +30,7 @@ func NewDepthFirstPath(graph *Graph, s int) (*DepthFirstPath, error) {
 }
 
 // dfs (depth first search) from v
-func (d *DepthFirstPath) dfs(graph *Graph, v int) {
+func (d *DepthFirstPath) dfs(graph UndirectedOrDirectedGraph, v int) {
 	d.marked[v] = true
 	adj, _ := graph.Adj(v)
 	for w := range adj {

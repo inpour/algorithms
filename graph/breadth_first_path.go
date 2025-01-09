@@ -17,7 +17,7 @@ type BreadthFirstPath struct {
 
 // NewBreadthFirstPath computes the shortest path between the source vertex (s) and every other vertex in graph.
 // The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
-func NewBreadthFirstPath(graph *Graph, s int) (*BreadthFirstPath, error) {
+func NewBreadthFirstPath(graph UndirectedOrDirectedGraph, s int) (*BreadthFirstPath, error) {
 	if err := graph.validateVertex(s); err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func NewBreadthFirstPath(graph *Graph, s int) (*BreadthFirstPath, error) {
 }
 
 // bfs (breadth first search) from s
-func (b *BreadthFirstPath) bfs(graph *Graph, s int) {
+func (b *BreadthFirstPath) bfs(graph UndirectedOrDirectedGraph, s int) {
 	for v := 0; v < graph.V(); v++ {
 		b.distTo[v] = -1
 	}

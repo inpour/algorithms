@@ -9,7 +9,7 @@ type DepthFirstSearch struct {
 
 // NewDepthFirstSearch computes the vertices in graph that are connected to the source vertex (s).
 // The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
-func NewDepthFirstSearch(graph *Graph, s int) (*DepthFirstSearch, error) {
+func NewDepthFirstSearch(graph UndirectedOrDirectedGraph, s int) (*DepthFirstSearch, error) {
 	if err := graph.validateVertex(s); err != nil {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func NewDepthFirstSearch(graph *Graph, s int) (*DepthFirstSearch, error) {
 }
 
 // dfs (depth first search) from v
-func (d *DepthFirstSearch) dfs(graph *Graph, v int) {
+func (d *DepthFirstSearch) dfs(graph UndirectedOrDirectedGraph, v int) {
 	d.count++
 	d.marked[v] = true
 	adj, _ := graph.Adj(v)

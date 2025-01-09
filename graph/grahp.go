@@ -1,7 +1,6 @@
 package graph
 
 import (
-	"errors"
 	"github.com/inpour/algorithms/fundamental"
 	"iter"
 )
@@ -35,9 +34,6 @@ func NewGraph(v int) (*Graph, error) {
 		adj: adj,
 	}, nil
 }
-
-var ErrInvalidVertices = errors.New("number of vertices in a Graph must be non-negative")
-var ErrInvalidVertexIndex = errors.New("invalid vertex index")
 
 // V returns the number of vertices.
 // The complexity is O(1).
