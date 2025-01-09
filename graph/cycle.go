@@ -6,13 +6,12 @@ import (
 )
 
 // Cycle represents a data type for determining whether an undirected graph has a simple cycle.
-// The HasCycle operation determines whether the graph has a cycle and, if so, the Cycle operation returns one.
 // This implementation uses depth-first search (DFS).
 // It uses O(V) extra space (not including the graph), where V is the number of vertices.
 type Cycle struct {
-	marked []bool
-	edgeTo []int
-	cycle  *fundamental.Stack[int]
+	marked []bool                  // marked[v] = has vertex v been marked?
+	edgeTo []int                   // edgeTo[v] = previous vertex on path to v
+	cycle  *fundamental.Stack[int] // cycle
 }
 
 // NewCycle determines whether the undirected graph has a cycle and, if so, finds such a cycle.
@@ -25,16 +24,18 @@ func NewCycle(graph *Graph) *Cycle {
 		cycle:  fundamental.NewStack[int](),
 	}
 
+	// identify self-loop as a cycle
 	if c.hasSelfLoop(graph) {
 		return c
 	}
 
+	// identify parallel edge as a cycle
 	if c.hasParallelEdges(graph) {
 		return c
 	}
 
 	for v := 0; v < graph.V(); v++ {
-		if !c.marked[v] {
+		if !c.marked[v] && c.cycle.IsEmpty() {
 			c.dfs(graph, v, -1)
 		}
 	}
@@ -115,6 +116,7 @@ func (c *Cycle) HasCycle() bool {
 }
 
 // Cycle returns an iterator that iterates over a cycle in the graph.
+// The complexity is O(1).
 func (c *Cycle) Cycle() iter.Seq[int] {
 	return c.cycle.Iterator()
 }
