@@ -63,10 +63,3 @@ func (d *DepthFirstOrder) Post() iter.Seq[int] {
 func (d *DepthFirstOrder) ReversePost() iter.Seq[int] {
 	return d.reversePost.Iterator()
 }
-
-func (d *DepthFirstOrder) validateVertex(v int) error {
-	if v < 0 || v >= len(d.marked) {
-		return ErrInvalidVertexIndex
-	}
-	return nil
-}

@@ -9,7 +9,7 @@ import (
 // Eulerian Path is a path in a digraph that visits every edge exactly once. Eulerian cycle is an Eulerian Path that
 // starts and ends on the same vertex.
 // This implementation uses a non-recursive depth-first search.
-// It uses O(V + E) extra space (not including the graph), where V is the number of vertices and E is the number of edges.
+// It uses O(V + E) extra space (not including the digraph), where V is the number of vertices and E is the number of edges.
 type DirectedEulerian struct {
 	status      EulerianStatus
 	pathOrCycle *fundamental.Stack[int]
