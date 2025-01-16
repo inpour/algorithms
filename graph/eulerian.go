@@ -13,10 +13,11 @@ const (
 	HasEulerianCycle                       // Eulerian
 )
 
-// Eulerian represents a data type for finding an Euler cycle or path in a graph.
-// Eulerian Path is a path in a graph that visits every edge exactly once. Eulerian Circuit is an Eulerian Path that
+// Eulerian represents a data type for finding an Eulerian cycle or path in a graph.
+// Eulerian Path is a path in a graph that visits every edge exactly once. Eulerian cycle is an Eulerian Path that
 // starts and ends on the same vertex.
 // This implementation uses a non-recursive depth-first search.
+// It uses O(V + E) extra space (not including the graph), where V is the number of vertices and E is the number of edges.
 // This implementation is trickier than the one for digraphs because when we use edge v-w from v's adjacency list,
 // we must be careful not to use the second copy of the edge from w's adjacency list.
 type Eulerian struct {
@@ -60,18 +61,18 @@ func NewEulerian(graph *Graph) *Eulerian {
 		return e
 	}
 
-	// find vertex from which to start potential Euler path (a vertex v with odd degree(v) if it exits),
-	// if graph has Euler cycle only non isolated vertex is enough
+	// find vertex from which to start potential Eulerian path (a vertex v with odd degree(v) if it exits),
+	// if graph has Eulerian cycle only non isolated vertex is enough
 	s := e.nonIsolatedVertex(graph)
 	oddDegreeVertices := 0
 	for v := 0; v < graph.V(); v++ {
 		degree, _ := graph.Degree(v)
-		// graph can't have an Euler cycle
+		// graph can't have an Eulerian cycle
 		if degree%2 != 0 {
 			e.status = HasEulerianPath
 			oddDegreeVertices++
 			s = v
-			// graph can't have an Euler path
+			// graph can't have an Eulerian path
 			if oddDegreeVertices > 2 {
 				e.status = NotEulerian
 				return e
@@ -120,7 +121,7 @@ func NewEulerian(graph *Graph) *Eulerian {
 			dfsStack.Push(v)
 			v = edge.otherEdge(v)
 		}
-		// push vertex with no more leaving edges to cycle
+		// push vertex with no more leaving edges
 		e.pathOrCycle.Push(v)
 	}
 
