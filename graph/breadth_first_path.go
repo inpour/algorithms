@@ -12,7 +12,6 @@ type BreadthFirstPath struct {
 	marked []bool // marked[v] = is there an s-v path?
 	edgeTo []int  // edgeTo[v] = last edge on shortest s-v path
 	distTo []int  // distTo[v] = number of edges in shortest s-v path
-	s      int    // source vertex
 }
 
 // NewBreadthFirstPath computes the shortest path between the source vertex (s) and every other vertex in graph.
@@ -25,7 +24,6 @@ func NewBreadthFirstPath(graph UndirectedOrDirectedGraph, s int) (*BreadthFirstP
 		marked: make([]bool, graph.V()),
 		edgeTo: make([]int, graph.V()),
 		distTo: make([]int, graph.V()),
-		s:      s,
 	}
 	b.bfs(graph, s)
 	return b, nil
@@ -79,10 +77,11 @@ func (b *BreadthFirstPath) PathTo(v int) (iter.Seq[int], error) {
 	if hasPath, err := b.HasPathTo(v); !hasPath {
 		return s.Iterator(), err
 	}
-	for x := v; x != b.s; x = b.edgeTo[x] {
+	x := v
+	for ; b.distTo[x] != 0; x = b.edgeTo[x] {
 		s.Push(x)
 	}
-	s.Push(b.s)
+	s.Push(x)
 	return s.Iterator(), nil
 }
 
