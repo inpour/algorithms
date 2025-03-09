@@ -29,7 +29,24 @@ func NewBreadthFirstPath(graph UndirectedOrDirectedGraph, s int) (*BreadthFirstP
 	return b, nil
 }
 
-// bfs (breadth first search) from s
+// NewBreadthFirstPathMultiSource computes the shortest path between any one of the source vertices and every other vertex in graph.
+// The complexity is O(V + E), where V is the number of vertices and E is the number of edges.
+func NewBreadthFirstPathMultiSource(graph UndirectedOrDirectedGraph, sources []int) (*BreadthFirstPath, error) {
+	for i := 0; i < len(sources); i++ {
+		if err := graph.validateVertex(sources[i]); err != nil {
+			return nil, err
+		}
+	}
+	b := &BreadthFirstPath{
+		marked: make([]bool, graph.V()),
+		edgeTo: make([]int, graph.V()),
+		distTo: make([]int, graph.V()),
+	}
+	b.bfsMultiSource(graph, sources)
+	return b, nil
+}
+
+// bfs (breadth first search) from a single source
 func (b *BreadthFirstPath) bfs(graph UndirectedOrDirectedGraph, s int) {
 	for v := 0; v < graph.V(); v++ {
 		b.distTo[v] = -1
@@ -38,6 +55,31 @@ func (b *BreadthFirstPath) bfs(graph UndirectedOrDirectedGraph, s int) {
 	b.marked[s] = true
 	q := fundamental.NewQueue[int]()
 	q.Enqueue(s)
+	for !q.IsEmpty() {
+		v, _ := q.Dequeue()
+		adj, _ := graph.Adj(v)
+		for w := range adj {
+			if !b.marked[w] {
+				b.edgeTo[w] = v
+				b.distTo[w] = b.distTo[v] + 1
+				b.marked[w] = true
+				q.Enqueue(w)
+			}
+		}
+	}
+}
+
+// bfsMultiSource (breadth first search) from multiple sources
+func (b *BreadthFirstPath) bfsMultiSource(graph UndirectedOrDirectedGraph, sources []int) {
+	for v := 0; v < graph.V(); v++ {
+		b.distTo[v] = -1
+	}
+	q := fundamental.NewQueue[int]()
+	for _, s := range sources {
+		b.distTo[s] = 0
+		b.marked[s] = true
+		q.Enqueue(s)
+	}
 	for !q.IsEmpty() {
 		v, _ := q.Dequeue()
 		adj, _ := graph.Adj(v)
