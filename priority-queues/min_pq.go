@@ -1,24 +1,24 @@
 package priority_queues
 
-// MaxPQ represents max priority queue of generic key.
+// MinPQ represents min priority queue of generic key.
 // It relies on the compare() function to compare two keys:
 //
 //	if a == b then compare(a, b) returns 0
 //	if a > b then compare(a, b) returns 1
 //	if a < b then compare(a, b) returns -1
 //
-// This implementation uses a max heap as underlying data structure.
-type MaxPQ[K any] struct {
+// This implementation uses a min heap as underlying data structure.
+type MinPQ[K any] struct {
 	pq      []K              // store items at indices 1 to n
 	n       int              // number of items on priority queue
 	compare func(a, b K) int // function to compare two keys
 }
 
-// NewMaxPQ initializes an empty max priority queue.
+// NewMinPQ initializes an empty min priority queue.
 // It gets a function as a parameter to compare two keys.
 // The complexity is O(1).
-func NewMaxPQ[K any](compare func(a, b K) int) *MaxPQ[K] {
-	return &MaxPQ[K]{
+func NewMinPQ[K any](compare func(a, b K) int) *MinPQ[K] {
+	return &MinPQ[K]{
 		pq:      make([]K, 2),
 		n:       0,
 		compare: compare,
@@ -27,19 +27,19 @@ func NewMaxPQ[K any](compare func(a, b K) int) *MaxPQ[K] {
 
 // IsEmpty returns true if priority queue is empty.
 // The complexity is O(1).
-func (m *MaxPQ[K]) IsEmpty() bool {
+func (m *MinPQ[K]) IsEmpty() bool {
 	return m.n == 0
 }
 
 // Size returns the size priority queue is empty.
 // The complexity is O(1).
-func (m *MaxPQ[K]) Size() int {
+func (m *MinPQ[K]) Size() int {
 	return m.n
 }
 
-// Max returns the largest key on this priority queue.
+// Min returns the smallest key on this priority queue.
 // The complexity is O(1).
-func (m *MaxPQ[K]) Max() (K, error) {
+func (m *MinPQ[K]) Min() (K, error) {
 	var key K
 	if m.IsEmpty() {
 		return key, ErrEmptyPQ
@@ -49,7 +49,7 @@ func (m *MaxPQ[K]) Max() (K, error) {
 
 // Insert adds a new key to this priority queue.
 // The complexity is O(log(N)) where N is the number of keys in priority queue.
-func (m *MaxPQ[K]) Insert(key K) {
+func (m *MinPQ[K]) Insert(key K) {
 	if m.n == len(m.pq)-1 {
 		m.resize(2 * len(m.pq))
 	}
@@ -58,14 +58,14 @@ func (m *MaxPQ[K]) Insert(key K) {
 	m.swim(m.n)
 }
 
-// DelMax removes and returns the largest key on this priority queue.
+// DelMin removes and returns the smallest key on this priority queue.
 // The complexity is O(log(N)) where N is the number of keys in priority queue.
-func (m *MaxPQ[K]) DelMax() (K, error) {
+func (m *MinPQ[K]) DelMin() (K, error) {
 	var key K
 	if m.IsEmpty() {
 		return key, ErrEmptyPQ
 	}
-	max_ := m.pq[1]
+	min_ := m.pq[1]
 	m.exchange(1, m.n)
 	m.n--
 	m.sink(1)
@@ -73,11 +73,11 @@ func (m *MaxPQ[K]) DelMax() (K, error) {
 	if (m.n > 0) && (m.n == (len(m.pq)-1)/4) {
 		m.resize(len(m.pq) / 2)
 	}
-	return max_, nil
+	return min_, nil
 }
 
 // resize the underlying slice
-func (m *MaxPQ[K]) resize(newSize int) {
+func (m *MinPQ[K]) resize(newSize int) {
 	if newSize <= m.n {
 		return
 	}
@@ -88,20 +88,20 @@ func (m *MaxPQ[K]) resize(newSize int) {
 	m.pq = temp
 }
 
-func (m *MaxPQ[K]) swim(i int) {
-	for i > 1 && m.less(i/2, i) {
+func (m *MinPQ[K]) swim(i int) {
+	for i > 1 && m.greater(i/2, i) {
 		m.exchange(i/2, i)
 		i = i / 2
 	}
 }
 
-func (m *MaxPQ[K]) sink(i int) {
+func (m *MinPQ[K]) sink(i int) {
 	for 2*i <= m.n {
 		j := 2 * i
-		if j < m.n && m.less(j, j+1) {
+		if j < m.n && m.greater(j, j+1) {
 			j++
 		}
-		if !m.less(i, j) {
+		if !m.greater(i, j) {
 			break
 		}
 		m.exchange(i, j)
@@ -109,12 +109,12 @@ func (m *MaxPQ[K]) sink(i int) {
 	}
 }
 
-func (m *MaxPQ[K]) exchange(i, j int) {
+func (m *MinPQ[K]) exchange(i, j int) {
 	swap := m.pq[i]
 	m.pq[i] = m.pq[j]
 	m.pq[j] = swap
 }
 
-func (m *MaxPQ[K]) less(i, j int) bool {
-	return m.compare(m.pq[i], m.pq[j]) < 0
+func (m *MinPQ[K]) greater(i, j int) bool {
+	return m.compare(m.pq[i], m.pq[j]) > 0
 }
