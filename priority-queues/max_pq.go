@@ -1,11 +1,5 @@
 package priority_queues
 
-import (
-	"errors"
-)
-
-var ErrEmptyPQ = errors.New("priority queue is empty")
-
 // MaxPQ represents max priority queue of generic key.
 // It relies on the compare() function to compare two keys:
 //
