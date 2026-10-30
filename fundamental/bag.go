@@ -10,7 +10,7 @@ import (
 // The Add, IsEmpty, and Size operations take constant time. Iteration takes time
 // proportional to the number of items.
 type Bag[T any] struct {
-	lock  *sync.Mutex // protect race condition
+	lock  sync.Mutex  // protect race condition
 	first *bagNode[T] // beginning of Bag
 	size  int         // number of items in Bag
 }
@@ -25,7 +25,7 @@ type bagNode[T any] struct {
 // The complexity is O(1).
 func NewBag[T any]() *Bag[T] {
 	return &Bag[T]{
-		lock: &sync.Mutex{},
+		lock: sync.Mutex{},
 		size: 0,
 	}
 }
@@ -33,12 +33,18 @@ func NewBag[T any]() *Bag[T] {
 // IsEmpty returns true if this Bag is empty.
 // The complexity is O(1).
 func (bag *Bag[T]) IsEmpty() bool {
+	bag.lock.Lock()
+	defer bag.lock.Unlock()
+
 	return bag.first == nil
 }
 
 // Size returns the number of items in this Bag.
 // The complexity is O(1).
 func (bag *Bag[T]) Size() int {
+	bag.lock.Lock()
+	defer bag.lock.Unlock()
+
 	return bag.size
 }
 
@@ -53,10 +59,15 @@ func (bag *Bag[T]) Add(item T) {
 	bag.size++
 }
 
-// Iterator returns an iterator that iterates over the items in the Bag.
+// Iterator returns an iterator over the items in the Bag.
+// It returns an iterator over a snapshot taken when traversal begins.
 func (bag *Bag[T]) Iterator() iter.Seq[T] {
 	return func(yield func(T) bool) {
-		for node := bag.first; node != nil; node = node.next {
+		bag.lock.Lock()
+		first := bag.first
+		bag.lock.Unlock()
+
+		for node := first; node != nil; node = node.next {
 			if !yield(node.item) {
 				return
 			}
