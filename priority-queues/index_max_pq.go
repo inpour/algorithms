@@ -64,7 +64,7 @@ func (p *IndexMaxPQ[K]) IsEmpty() bool {
 
 func (p *IndexMaxPQ[K]) validateIndex(i int) error {
 	if i < 0 || i >= p.maxN {
-		return ErrInexOutOfRange
+		return ErrIndexOutOfRange
 	}
 	return nil
 }
@@ -92,7 +92,7 @@ func (p *IndexMaxPQ[K]) Insert(i int, key K) error {
 		return err
 	}
 	if contains {
-		return ErrInexAlreadyExists
+		return ErrIndexAlreadyExists
 	}
 	p.n++
 	p.qp[i] = p.n
@@ -147,7 +147,7 @@ func (p *IndexMaxPQ[K]) KeyOf(i int) (K, error) {
 		return key, err
 	}
 	if !contains {
-		return key, ErrInexNotExists
+		return key, ErrIndexNotExists
 	}
 	return p.keys[i], nil
 }
@@ -160,7 +160,7 @@ func (p *IndexMaxPQ[K]) ChangeKey(i int, key K) error {
 		return err
 	}
 	if !contains {
-		return ErrInexNotExists
+		return ErrIndexNotExists
 	}
 	p.keys[i] = key
 	p.swim(p.qp[i])
@@ -176,7 +176,7 @@ func (p *IndexMaxPQ[K]) DecreaseKey(i int, key K) error {
 		return err
 	}
 	if !contains {
-		return ErrInexNotExists
+		return ErrIndexNotExists
 	}
 	if p.compare(p.keys[i], key) <= 0 {
 		return ErrDecreaseWithInvalidKey
@@ -194,7 +194,7 @@ func (p *IndexMaxPQ[K]) IncreaseKey(i int, key K) error {
 		return err
 	}
 	if !contains {
-		return ErrInexNotExists
+		return ErrIndexNotExists
 	}
 	if p.compare(p.keys[i], key) >= 0 {
 		return ErrIncreaseWithInvalidKey
@@ -212,7 +212,7 @@ func (p *IndexMaxPQ[K]) Delete(i int) error {
 		return err
 	}
 	if !contains {
-		return ErrInexNotExists
+		return ErrIndexNotExists
 	}
 	index := p.qp[i]
 	p.exchange(index, p.n)
