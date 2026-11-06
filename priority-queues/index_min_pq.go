@@ -64,7 +64,7 @@ func (p *IndexMinPQ[K]) IsEmpty() bool {
 
 func (p *IndexMinPQ[K]) validateIndex(i int) error {
 	if i < 0 || i >= p.maxN {
-		return errors.New("index out of range")
+		return ErrInexOutOfRange
 	}
 	return nil
 }
@@ -92,7 +92,7 @@ func (p *IndexMinPQ[K]) Insert(i int, key K) error {
 		return err
 	}
 	if contains {
-		return errors.New("index is already in the priority queue")
+		return ErrInexAlreadyExists
 	}
 	p.n++
 	p.qp[i] = p.n
@@ -178,11 +178,8 @@ func (p *IndexMinPQ[K]) DecreaseKey(i int, key K) error {
 	if !contains {
 		return ErrInexNotExists
 	}
-	if p.compare(p.keys[i], key) == 0 {
-		return errors.New("calling DecreaseKey() with a key equal to the key in the priority queue")
-	}
-	if p.compare(p.keys[i], key) < 0 {
-		return errors.New("calling DecreaseKey() with a key strictly greater than the key in the priority queue")
+	if p.compare(p.keys[i], key) <= 0 {
+		return ErrDecreaseWithInvalidKey
 	}
 	p.keys[i] = key
 	p.swim(p.qp[i])
@@ -199,11 +196,8 @@ func (p *IndexMinPQ[K]) IncreaseKey(i int, key K) error {
 	if !contains {
 		return ErrInexNotExists
 	}
-	if p.compare(p.keys[i], key) == 0 {
-		return errors.New("calling IncreaseKey() with a key equal to the key in the priority queue")
-	}
-	if p.compare(p.keys[i], key) > 0 {
-		return errors.New("calling IncreaseKey() with a key strictly less than the key in the priority queue")
+	if p.compare(p.keys[i], key) >= 0 {
+		return ErrIncreaseWithInvalidKey
 	}
 	p.keys[i] = key
 	p.sink(p.qp[i])
